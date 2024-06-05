@@ -1,0 +1,35 @@
+#!/bin/bash --login
+#$ -cwd
+#$ -l nvidia_v100            # Can instead use 'nvidia_a100' for the A100 GPUs (if permitted!)
+
+PROJECT_NAME="PINT"
+
+module load libs/cuda/11.7.0
+
+# Copy a directory of files from scratch to the GPU node's local NVMe storage
+cp -r ~/scratch/${PROJECT_NAME}/ $TMPDIR
+
+# Process the data with a GPU app, from within the local NVMe storage area
+cd $TMPDIR/${PROJECT_NAME}/
+python utils/preprocess_data.py --data mooc --bipartite
+python preproc.py --data mooc --r_dim 4 --data_split train
+python preproc.py --data mooc --r_dim 4 --data_split val_ind
+python preproc.py --data mooc --r_dim 4 --data_split val_trans
+python preproc.py --data mooc --r_dim 4 --data_split test_ind
+python preproc.py --data mooc --r_dim 4 --data_split test_trans
+python preproc.py --data mooc --r_dim 4 --data_split join
+python train.py --data mooc --n_layer 2 --use_memory --beta 0.0001 --n_epoch 50 --patience 5 --n_runs 10 --n_degree 10 --memory_dim 172
+
+# Copy the results back to the main scratch area
+rsync -av $TMPDIR/${PROJECT_NAME}/ ~/scratch/${PROJECT_NAME}/
+
+# The batch system will automatically delete the contents of $TMPDIR at the end of your job.
+cd ~/scratch/${PROJECT_NAME}/
+git pull
+git add ./log/
+git commit -m "logs updated"
+git push
+
+sleep 3
+#$ -m ea
+#$ -M jiafeng.xiong@manchester.ac.uk,xin.quan@manchester.ac.uk    # Send email when finished.
