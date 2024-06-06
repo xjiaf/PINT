@@ -3,7 +3,7 @@
 #$ -l nvidia_v100            # Can instead use 'nvidia_a100' for the A100 GPUs (if permitted!)
 
 module load libs/cuda/11.7.0
-
+conda activate ja
 # Copy a directory of files from scratch to the GPU node's local NVMe storage
 cp -r ~/scratch/PINT/ $TMPDIR
 
