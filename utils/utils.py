@@ -6,6 +6,9 @@ def get_data_settings(data):
   if data == 'wikipedia':
     partition_size = 20
     last = 0
+  elif data == 'wikipedia_fm':
+    partition_size = 20
+    last = 0
   elif data == 'lastfm':
     partition_size = 100
     last = 36
