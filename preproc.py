@@ -1,5 +1,6 @@
 import math
 import sys
+import os
 import argparse
 import torch
 import numpy as np
@@ -34,6 +35,10 @@ try:
 except:
 	parser.print_help()
 	sys.exit(0)
+
+if not os.path.exists('pos_features'):
+    # 创建文件夹
+    os.makedirs('pos_features')
 
 BATCH_SIZE = args.bs
 GPU = args.gpu
@@ -170,4 +175,3 @@ else:
 		ind_val_V, ind_val_R = torch.load('pos_features/' + args.data + '_VR_val_bs_' + str(args.bs) + '_rdim_' + str(args.r_dim) + '_inductive')
 		torch.save([ind_val_V, ind_val_R, val_V, val_R], 'pos_features/' + args.data + '_VR_val_bs_' + str(args.bs) + '_rdim_' + str(args.r_dim))
 		torch.save([ind_test_V, ind_test_R, test_V, test_R], 'pos_features/' + args.data + '_VR_test_bs_' + str(args.bs) + '_rdim_' + str(args.r_dim))
-
