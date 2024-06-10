@@ -24,6 +24,9 @@ def get_data_settings(data):
   elif data == 'reddit':
     partition_size = 100
     last = 19
+  elif data == 'reddit_fm':
+    partition_size = 100
+    last = 19
   return partition_size, last
 
 
