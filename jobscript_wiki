@@ -15,7 +15,7 @@ python preproc.py --data wikipedia --r_dim 4 --data_split val_trans
 python preproc.py --data wikipedia --r_dim 4 --data_split test_ind
 python preproc.py --data wikipedia --r_dim 4 --data_split test_trans
 python preproc.py --data wikipedia --r_dim 4 --data_split join
-python train.py --data wikipedia --n_layer 2 --use_memory --beta 0.0001 --n_epoch 50 --patience 5 --n_runs 10 --n_degree 10 --memory_dim 172
+python train.py --data wikipedia --n_layer 2 --use_memory --beta 0.0001 --n_epoch 50 --patience 5 --n_runs 10 --n_degree 10 --memory_dim 172 --prefix "pint_wikipedia"
 
 # Copy the results back to the main scratch area
 rsync -av $TMPDIR/PINT/log/ ~/scratch/PINT/log/
